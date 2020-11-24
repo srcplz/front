@@ -55,7 +55,7 @@ ul {
 
 .standardLink{
     composes: link;
-    color: var(--font-medium);
+    color: var(--font-light);
 }
 
 .activeLink {

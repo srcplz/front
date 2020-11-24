@@ -5,48 +5,60 @@ import {ReactComponent as EditIcon} from '../img/edit.svg'
 import {ReactComponent as FavoritesIcon} from '../img/favorites.svg'
 import {ReactComponent as FolderIcon} from '../img/folder.svg'
 import {ReactComponent as SearchIcon} from '../img/search.svg'
+import { Link, Route, match, matchPath } from 'react-router-dom'
+import { colors } from '../utils/colors'
 
 export enum ButtonTypes {
     Search,
     Create, 
     Favorites,
     Social,
-    Saved,
+    Contributed,
 }
 
 interface SideButtonProps {
     collapsed: boolean,
-    type: ButtonTypes
+    type: ButtonTypes,
+    path: string,
 }
 
 export class SideButton extends Component<SideButtonProps, {}>{
 
     render() {
         return (
-            <button className={styles.sidebuttonContainer}>
-                {this.getButtonImage()}
-                {this.props.collapsed ? null:
-                <div className={styles.sidebuttonText}>{this.getButtonName()}</div>}
-            </button>
+            <Route path={this.props.path} children={({match}) => (
+                <Link to={this.props.path}>
+                    <button className={styles.sidebuttonContainer}>
+                        {this.getButtonImage(match)}
+                        {this.props.collapsed ? null:
+                        <div className={styles.sidebuttonText}>{this.getButtonName()}</div>}
+                    </button>
+                </Link>
+            )}/>
         )
     }
 
-    getButtonImage(): JSX.Element  {
+    getButtonImage(match: match<any> | null): JSX.Element  {
         switch (this.props.type) {
             case ButtonTypes.Search:
-                return <SearchIcon/>
+                return <SearchIcon stroke={this.searchMatches(match) ? colors.relief : colors.fontMedium } fill={this.searchMatches(match) ? colors.relief : colors.fontMedium }/>
             case ButtonTypes.Create:
-                return <EditIcon/>
+                return <EditIcon stroke={match ? colors.relief : colors.fontMedium }/>
             case ButtonTypes.Favorites:
-                return <FavoritesIcon/>
+                return <FavoritesIcon stroke={match ? colors.relief : colors.fontMedium } fill={match ? colors.relief : colors.fontMedium }/>
             case ButtonTypes.Social:
-                return <SocialIcon/>
-            case ButtonTypes.Saved:
-                return <FolderIcon/>
+                return <SocialIcon stroke={match ? colors.relief : colors.fontMedium }/>
+            case ButtonTypes.Contributed:
+                return <FolderIcon stroke={match ? colors.relief : colors.fontMedium }/>
             default:
                 return <img src={'/search.svg'} alt={"Search Icon"}/>
                 
         }
+    }
+
+    searchMatches(match: match<any> | null): boolean {
+        
+        return match?.isExact || match?.path.indexOf("search") != -1
     }
 
     getButtonName(): String {
@@ -59,8 +71,8 @@ export class SideButton extends Component<SideButtonProps, {}>{
                 return "Favorites"
             case ButtonTypes.Social:
                 return "Sourcerers"
-            case ButtonTypes.Saved:
-                return "My source sheets"
+            case ButtonTypes.Contributed:
+                return "My contributions"
             default:
                 return ""
         }
