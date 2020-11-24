@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import ModalRoot from './components/ModalRoot';
 
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    <ModalRoot/>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -5,7 +5,7 @@ import {ReactComponent as EditIcon} from '../img/edit.svg'
 import {ReactComponent as FavoritesIcon} from '../img/favorites.svg'
 import {ReactComponent as FolderIcon} from '../img/folder.svg'
 import {ReactComponent as SearchIcon} from '../img/search.svg'
-import { Link, Route, match, matchPath } from 'react-router-dom'
+import { Link, Route, match } from 'react-router-dom'
 import { colors } from '../utils/colors'
 
 export enum ButtonTypes {
@@ -58,7 +58,7 @@ export class SideButton extends Component<SideButtonProps, {}>{
 
     searchMatches(match: match<any> | null): boolean {
         
-        return match?.isExact || match?.path.indexOf("search") != -1
+        return match?.isExact || match?.path.indexOf("search") !== -1
     }
 
     getButtonName(): String {
