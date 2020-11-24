@@ -7,6 +7,10 @@ export default class Core extends Component {
         return (
             <div className={styles.container}>
                 <Sidebar/>
+                <div className={styles.contentContainer}>
+
+                
+                </div>
             </div>
         )
     }
