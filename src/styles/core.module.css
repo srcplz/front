@@ -3,11 +3,30 @@
     margin-bottom: 0;
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: flex-start;
     flex: 1 0 auto;
+    height: 100vh;
 }
 
-.container_grid {
-    width: 100%;
-    height: 600px;
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1 0 auto;
+    justify-content: flex-start;
+    overflow-y: scroll;
+    flex: 1 1 600px;
 }
+
+.modal {
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

@@ -6,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-y: hidden;
 }
 
 code {
@@ -215,4 +216,9 @@ body {
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
+}
+
+#modal-root {
+  position: relative;
+  z-index: 999;
 }
