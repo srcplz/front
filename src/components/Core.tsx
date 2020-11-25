@@ -9,7 +9,7 @@ export default class Core extends Component {
             <div className={styles.container}>
                 <Sidebar/>
                 <div className={styles.contentContainer}>
-
+                <Sheets/>
                 
                 </div>
             </div>

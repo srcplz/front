@@ -27,8 +27,8 @@ function getItems(nextGroupKey:number, nextKey:number, count:number) {
 export default function Sheets() {
     const [items, setItems] = React.useState(getItems(0, 0, 10))
     return (
-<GridLayout
-            className={`gridlayout ${styles.container_grid}`}
+        <GridLayout
+            className={`gridlayout ${styles.containerGrid}`}
             groupBy={item => item.props["data-groupkey"]}
             options={{
                 isOverflowScroll: false,

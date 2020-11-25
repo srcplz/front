@@ -19,6 +19,10 @@
     flex: 1 1 600px;
 }
 
+.containerGrid {
+    width: 100%;
+}
+
 .modal {
     background-color: rgba(0,0,0,0.5);
     position: fixed;
