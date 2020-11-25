@@ -6,3 +6,8 @@
     justify-content: flex-start;
     flex: 1 0 auto;
 }
+
+.container_grid {
+    width: 100%;
+    height: 600px;
+}
