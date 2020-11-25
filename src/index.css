@@ -217,3 +217,8 @@ body {
   line-height: normal;
   letter-spacing: normal;
 }
+
+#modal-root {
+  position: relative;
+  z-index: 999;
+}
