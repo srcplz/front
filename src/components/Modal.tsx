@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { createPortal } from 'react-dom'
+import styles from '../styles/core.module.css'
 
 interface Props {}
 
@@ -12,6 +13,7 @@ class Modal extends Component<Props> {
 
         this.root = document.getElementById("modal-root")
         this.el = document.createElement("div")
+        this.el.className = styles.modal
     }
 
     componentDidMount() {

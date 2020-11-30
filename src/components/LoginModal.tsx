@@ -9,9 +9,9 @@ export default class LoginModal extends Component<Props> {
 
     render() {
         return (
-            <div className={styles.modal}>
+            
                 <button onClick={e => this.props.onClick()}>Click</button>
-            </div>
+            
         )
     }
 }
