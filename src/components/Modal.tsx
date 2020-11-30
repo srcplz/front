@@ -2,18 +2,27 @@ import { Component } from 'react'
 import { createPortal } from 'react-dom'
 import styles from '../styles/core.module.css'
 
-interface Props {}
+interface ModalState {
+    opened: boolean
+}
 
-class Modal extends Component<Props> {
+interface ModalProps {
+    closingFunction: () => void
+}
+
+class Modal extends Component<ModalProps, ModalState> {
     el: HTMLElement
     root: HTMLElement | null
-
-    constructor(props: Props) {
+    state = {
+        opened: true
+    }
+    constructor(props: ModalProps, state: ModalState) {
         super(props)
 
         this.root = document.getElementById("modal-root")
         this.el = document.createElement("div")
         this.el.className = styles.modal
+        this.el.onclick = this.props.closingFunction
     }
 
     componentDidMount() {
