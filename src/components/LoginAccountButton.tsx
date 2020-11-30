@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { AuthContext } from '../utils/context'
 import styles from '../styles/navbar.module.css'
-import Modal from './Modal'
+import ModalPortal from './ModalPortal'
 import LoginModal from './LoginModal'
+import Modal from './Modal'
 
 interface LoginButtonState {
     modalOpened: boolean
@@ -28,9 +29,7 @@ export default class LoginAccountButton extends Component<{}, LoginButtonState> 
                     className={styles.loginButton}
                     onClick={e => this.openModal()}> Log In </button>}
                 {this.state.modalOpened 
-                ?   <Modal closingFunction={this.closeModal}>
-                        <LoginModal onClick={this.closeModal}/>
-                    </Modal>
+                ?   <LoginModal onClickOutside={this.closeModal}/>
                 : null}
             </div>
         )

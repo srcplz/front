@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react'
+import React from 'react'
 
 const ModalRoot: React.FC = ({children}) => {
     
