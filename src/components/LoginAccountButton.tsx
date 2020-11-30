@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import { AuthContext } from '../utils/context'
 import styles from '../styles/navbar.module.css'
-import ModalPortal from './ModalPortal'
+import { AuthContext } from '../utils/context'
 import LoginModal from './LoginModal'
-import Modal from './Modal'
 
 interface LoginButtonState {
     modalOpened: boolean

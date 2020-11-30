@@ -1,10 +1,31 @@
 .container {
     background-color: var(--light-background);
     width: 40%;
-    height: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border-radius: 0.25rem;
     border: 1px solid var(--relief);
+}
+
+.title {
+    composes: Heading1 from '../index.css';
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--font-medium);
+    text-align: center;
+    vertical-align: middle;
+    align-self: center;
+}
+
+.signUpLink {
+    composes: Hyperlink from '../index.css';
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    text-decoration: underline;
+    color: var(--contrast);
+    text-align: center;
+    vertical-align: middle;
+    align-self: center;
 }
