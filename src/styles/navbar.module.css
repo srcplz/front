@@ -10,6 +10,7 @@
     border-bottom: 1px solid var(--relief);
     display: flex;
     align-items: center;
+    z-index: 1;
 }
 
 a {

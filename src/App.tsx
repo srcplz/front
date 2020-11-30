@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Core from './components/Core';
 import Mission from './components/Mission';
+import ModalRoot from './components/ModalRoot';
 import Navbar from './components/Navbar';
 import './styles/colors.css'
 import { AuthContext } from './utils/context';
@@ -41,6 +42,9 @@ function App() {
             </Route>
           </Switch>
         </div>
+
+        <ModalRoot/>
+        
       </AuthContext.Provider>
     </BrowserRouter>
   );

@@ -4,8 +4,8 @@ export type AuthContextType = {
     isLoggedIn: boolean,
     loginModalOpened: boolean,
     token?: string,
-    login: Function,
-    logout: Function
+    login: () => void,
+    logout: () => void
 }
 
 export const AuthContext = createContext<AuthContextType>({

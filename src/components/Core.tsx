@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Sidebar from './Sidebar'
 import styles from '../styles/core.module.css'
 import Sheets from './Sheets'
+import Sidebar from './Sidebar'
 
 export default class Core extends Component {
     render() {

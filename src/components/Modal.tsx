@@ -1,34 +1,31 @@
-import { Component } from 'react'
-import { createPortal } from 'react-dom'
+import React, { useRef } from 'react'
+import styles from '../styles/modal.module.css'
+import { useOnClickOutside } from '../utils/hooks'
+import ModalPortal from './ModalPortal'
 
-interface Props {}
+interface ModalProps {
+    containerClass?: string,
+    closingFunction: Function
+}
 
-class Modal extends Component<Props> {
-    el: HTMLElement
-    root: HTMLElement | null
-
-    constructor(props: Props) {
-        super(props)
-
-        this.root = document.getElementById("modal-root")
-        this.el = document.createElement("div")
+const Modal: React.FC<ModalProps> = (props) => {
+    const containerRef = useRef(null)
+    const handleClickOutside = () => {
+        props.closingFunction()
+        console.log("clicked outside")
     }
+    useOnClickOutside(containerRef, handleClickOutside)
+    return (
+        <ModalPortal>
+            <div ref={containerRef} className={props.containerClass}>
+                {props.children}
+            </div>
+        </ModalPortal>
+    )
+}
 
-    componentDidMount() {
-        this.root?.appendChild(this.el)
-    }
-
-    componentWillUnmount() {
-        this.root?.removeChild(this.el)
-    }
-    
-
-    render() {
-        return createPortal(
-            this.props.children,
-            this.el
-        )
-    }
+Modal.defaultProps = {
+    containerClass: styles.container
 }
 
 export default Modal

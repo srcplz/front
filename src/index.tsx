@@ -9,7 +9,6 @@ import ModalRoot from './components/ModalRoot';
 ReactDOM.render(
   <React.StrictMode>
     <App />
-    <ModalRoot/>
   </React.StrictMode>,
   document.getElementById('root')
 );

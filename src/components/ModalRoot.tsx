@@ -1,6 +1,7 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 
 const ModalRoot: React.FC = ({children}) => {
+    
     return (
         <div id={"modal-root"}>
             {children}
