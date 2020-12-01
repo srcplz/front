@@ -12,7 +12,6 @@ const Modal: React.FC<ModalProps> = (props) => {
     const containerRef = useRef(null)
     const handleClickOutside = () => {
         props.closingFunction()
-        console.log("clicked outside")
     }
     useOnClickOutside(containerRef, handleClickOutside)
     return (
