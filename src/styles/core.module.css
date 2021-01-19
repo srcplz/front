@@ -50,18 +50,24 @@
     text-indent: 1rem;
 }
 
+.textInputInvalid {
+    composes: textInput;
+    border: solid 1px var(--bullshit-red);
+}
+
 .label {
     margin: 0 0.5rem 0 0.5rem;
     height: 1.5rem;
-    font-size: 0.875rem;
-    font-family: Karla;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
+    composes: tag from '../index.css';
     text-align: left;
     color: var(--font-light);
+}
+
+.errorLabel {
+    composes: tag from '../index.css';
+    height: 1.5rem;
+    margin: 0 0.5rem 0 0.5rem;
+    color: var(--bullshit-red);
 }
 
 .button {
@@ -74,4 +80,20 @@
     composes: Heading3 from '../index.css';
     color: var(--light-background);
     align-self: center;
+}
+
+.button:active {
+    box-shadow: inset 0 1px 1px 0 rgba(0, 0, 0, 0.25);
+    background-color: var(--accent);
+}
+
+.buttonDisabled {
+    composes: button;
+    box-shadow: inset 0 1px 1px 0 rgba(0, 0, 0, 0.25);
+    background-color: var(--font-light);
+    
+}
+
+.buttonDisabled:active {
+    background-color: var(--font-light);
 }
