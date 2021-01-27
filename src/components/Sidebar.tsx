@@ -4,7 +4,7 @@ import styles from '../styles/sidebar.module.css'
 import SideButton, { ButtonTypes } from './SideButton'
 
 export default function Sidebar() {
-    const [collapsed, setCollapsed] = useState(true)
+    const [collapsed, _] = useState(true)
     return (
         <BrowserRouter>
             <div className={collapsed ? styles.collapsedContainer : styles.container}>

@@ -1,10 +1,16 @@
+import axios from 'axios'
+import { Http2ServerRequest } from 'http2'
+import { instanceOf } from 'prop-types'
 import React, { Component } from 'react'
+import { Cookies, ReactCookieProps, withCookies } from 'react-cookie'
 import styles from '../styles/core.module.css'
 import modalStyles from '../styles/modal.module.css'
+import { AuthContext } from '../utils/context'
 import Modal from './Modal'
 import Textfield from './Textfield'
 
-interface Props {
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL ?? 'localhost:3000'
+interface Props extends ReactCookieProps {
     onClickOutside: Function
 }
 
@@ -19,7 +25,10 @@ interface LoginModalState {
     passwordConfirmationValid: boolean,
 }
 
-export default class LoginModal extends Component<Props, LoginModalState> {
+class LoginModal extends Component<Props, LoginModalState> {
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    }
     public state: LoginModalState = {
         email: "",
         emailValid: true,
@@ -83,6 +92,7 @@ export default class LoginModal extends Component<Props, LoginModalState> {
                     </div>}
                 </button>
             </Modal>
+
         )
     }
 
@@ -128,9 +138,20 @@ export default class LoginModal extends Component<Props, LoginModalState> {
     }
 
     logIn() {
+        let context = this.context
+        axios.post(BACKEND_URL + '/auth/login', {
+            email: this.state.email,
+            password: this.state.password
+        }).then((res) => {
+            if (res.status === 200) {
+                context.isLoggedIn = true
+            }
+        })
         console.log(this.state)
     }
     signUp() {
         console.log(this.state)
     }
 }
+LoginModal.contextType = AuthContext
+export default withCookies(LoginModal)
