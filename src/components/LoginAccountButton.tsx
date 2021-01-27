@@ -25,8 +25,7 @@ export default class LoginAccountButton extends Component<{}, LoginButtonState> 
                         onClick={e => auth.setLoggedIn(false)}> Logged In </button>
                     : <button 
                         className={styles.loginButton}
-                        onClick={e => auth.setLoggedIn(true)}> Log In </button>
-                        // onClick={e => this.openModal()}> Log In </button>
+                        onClick={e => this.openModal()}> Log In </button>
                         }
                     {this.state.modalOpened 
                     ?   <LoginModal onClickOutside={this.closeModal}/>

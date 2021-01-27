@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { Http2ServerRequest } from 'http2'
 import { instanceOf } from 'prop-types'
 import React, { Component } from 'react'
 import { Cookies, ReactCookieProps, withCookies } from 'react-cookie'
@@ -26,6 +25,8 @@ interface LoginModalState {
 }
 
 class LoginModal extends Component<Props, LoginModalState> {
+    static contextType = AuthContext
+    context!: React.ContextType<typeof AuthContext>;
     static propTypes = {
         cookies: instanceOf(Cookies).isRequired
     }
@@ -139,12 +140,17 @@ class LoginModal extends Component<Props, LoginModalState> {
 
     logIn() {
         let context = this.context
+        let closeModal = this.props.onClickOutside
         axios.post(BACKEND_URL + '/auth/login', {
             email: this.state.email,
             password: this.state.password
         }).then((res) => {
             if (res.status === 200) {
-                context.isLoggedIn = true
+                console.log('yes')
+                context.setLoggedIn(true)
+                closeModal()
+            } else {
+                console.log('no')
             }
         })
         console.log(this.state)
