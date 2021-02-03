@@ -70,7 +70,7 @@ class LoginModal extends Component<Props, LoginModalState> {
                     type={"password"} 
                     value={this.state.passwordConfirmation} 
                     onChange={this.confirmPasswordChanged} 
-                    title={"Password"} 
+                    title={"Confirm Password"}
                     fieldValid={this.state.passwordConfirmationValid} 
                     errorMessage={"Passwords should match"}/>
                 : null}
@@ -146,17 +146,35 @@ class LoginModal extends Component<Props, LoginModalState> {
             password: this.state.password
         }).then((res) => {
             if (res.status === 200) {
-                console.log('yes')
+                let { accessToken, refreshToken } = res.data
+                this.props.cookies?.set('refresh', refreshToken)
+                this.props.cookies?.set('access', accessToken)
+                // let { token } = res.data
+                // this.props.cookies?.set('token', token)
                 context.setLoggedIn(true)
                 closeModal()
             } else {
-                console.log('no')
+                //TODO: Error handling
             }
         })
-        console.log(this.state)
     }
     signUp() {
-        console.log(this.state)
+        let context = this.context
+        let closeModal = this.props.onClickOutside
+        axios.post(BACKEND_URL + '/auth/signup', {
+            email: this.state.email,
+            password: this.state.password
+        }).then(res => {
+            if (res.status === 200) {
+                let { accessToken, refreshToken } = res.data
+                this.props.cookies?.set('refresh', refreshToken)
+                this.props.cookies?.set('access', accessToken)
+                context.setLoggedIn(true)
+                closeModal()
+            } else {
+                //TODO: Error handling
+            }
+        })
     }
 }
 LoginModal.contextType = AuthContext
