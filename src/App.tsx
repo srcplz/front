@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import Core from './components/Core';
+import Core from './components/core/Core';
 import Mission from './components/Mission';
-import ModalRoot from './components/ModalRoot';
-import Navbar from './components/Navbar';
+import ModalRoot from './components/core/ModalRoot';
+import Navbar from './components/core/Navbar';
 import './styles/colors.css';
 import { AuthContext } from './utils/context';
 
@@ -33,9 +33,11 @@ function App() {
                 <Route exact path="/contact">
                   Contact Us
                 </Route>
-                <Route path="/">
-                  <Core/>
-                </Route>
+                <Route path="/" render={ ({match})=> (
+                  <>
+                    <Core match={match}/>
+                  </>
+                )}/>
               </Switch>
             </div>
     

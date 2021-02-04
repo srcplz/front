@@ -1,0 +1,15 @@
+.btn-group>.btn {
+  border-radius: 2rem;
+}
+
+.btn-primary {
+  background-color: var(--light-background) !important;
+  color: var(--font-light) !important;
+  border-color: var(--font-light) !important;
+}
+
+.active {
+  background-color: var(--font-light) !important;
+  color: var(--light-background) !important;
+
+}

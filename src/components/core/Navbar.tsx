@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Link, Route} from 'react-router-dom'
-import styles from '../styles/navbar.module.css'
-import LoginAccountButton from './LoginAccountButton'
+import styles from '../../styles/navbar.module.css'
+import LoginAccountButton from '../login/LoginAccountButton'
 
 
 class Navbar extends Component{

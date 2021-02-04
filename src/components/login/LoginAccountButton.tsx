@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import styles from '../styles/navbar.module.css'
-import { AuthContext } from '../utils/context'
+import styles from '../../styles/navbar.module.css'
+import { AuthContext } from '../../utils/context'
 import LoginModal from './LoginModal'
 
 interface LoginButtonState {

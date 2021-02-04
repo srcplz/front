@@ -1,12 +1,11 @@
 .container {
     margin-top: 5rem;
-    margin-bottom: 0;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     flex: 1 0 auto;
-    height: 100vh;
+    height: 0;
 }
 
 .contentContainer {
@@ -14,8 +13,8 @@
     flex-direction: row;
     flex-wrap: wrap;
     flex: 1 0 auto;
-    justify-content: flex-start;
-    overflow-y: scroll;
+    justify-content: center;
+    overflow-y: auto;
     flex: 1 1 600px;
 }
 

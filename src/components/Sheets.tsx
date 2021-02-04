@@ -49,9 +49,9 @@ export default function Sheets() {
                     ...getItems(nextGroupKey, nextKey, 10),
                 ]);
             }}>
-	{items.map((item, i) => {      
-        return (<SheetFolded data-groupkey={item.groupKey} key={"sheet"+i} data={item.data} />) 
-    })}
-</GridLayout>
+            {items.map((item, i) => {      
+                return (<SheetFolded data-groupkey={item.groupKey} key={"sheet"+i} data={item.data} />) 
+            })}
+        </GridLayout>
     )
 }
