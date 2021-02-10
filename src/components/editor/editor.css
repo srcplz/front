@@ -1,20 +1,35 @@
-.container {
-    flex-grow: 1;
-    padding: 1rem 3rem 1.5rem 1rem;
-    margin: 1rem 0 1rem 0;
-    border-radius: 8px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    border: solid 1px var(--relief);
-    background-color: var(--light-background);
+.nav-link.active {
+  border-radius: 1rem 1rem 0 0 !important;
+  background-color: var(--relief) !important;
+  border: none !important;
+  color: var(--light-background) !important;
 }
 
-.flexContainer {
-    flex: 1;
-    display: flex;
-    max-width: 54rem;
-    min-height: 48rem;
-    justify-content: flex-start;
-    align-items: stretch;
-    flex-direction: column;
+.nav-link.active:hover {
+  text-decoration: none !important;
 }
 
+.nav-link{
+  background-color: var(--light-background) !important;
+  height: 100% !important;
+  color: var(--font-light);
+  margin-bottom: 0 !important;
+  padding-top: 0.75rem !important;
+}
+
+.nav-tabs .nav-link:hover{
+  border-color: transparent !important;
+  text-decoration: underline;
+  color: var(--font-medium);
+}
+
+.tab-content{
+  height: 100%;
+  width: 100%;
+}
+
+.tab-pane.active.show {
+  height: 100%;
+  width: 100%;
+
+}

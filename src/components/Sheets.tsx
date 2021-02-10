@@ -27,31 +27,33 @@ function getItems(nextGroupKey:number, nextKey:number, count:number) {
 export default function Sheets() {
     const [items, setItems] = React.useState(getItems(0, 0, 10))
     return (
-        <GridLayout
-            className={`gridlayout ${styles.containerGrid}`}
-            groupBy={item => item.props["data-groupkey"]}
-            options={{
-                isOverflowScroll: false,
-                useFit: true,
-                useRecycle: true,
-                horizontal: false,
-            }}
-            layoutOptions={{
-                margin: 10,
-                align: "justify",
-            }}
-            onAppend={e => {
-                const nextGroupKey = (+e.groupKey! || 0) + 1;
-                const nextKey = items.length;
-
-                setItems([
-                    ...items,
-                    ...getItems(nextGroupKey, nextKey, 10),
-                ]);
-            }}>
-            {items.map((item, i) => {      
-                return (<SheetFolded data-groupkey={item.groupKey} key={"sheet"+i} data={item.data} />) 
-            })}
-        </GridLayout>
+        <div className={styles.contentContainer}>
+            <GridLayout
+                className={`gridlayout ${styles.containerGrid}`}
+                groupBy={item => item.props["data-groupkey"]}
+                options={{
+                    isOverflowScroll: false,
+                    useFit: true,
+                    useRecycle: true,
+                    horizontal: false,
+                }}
+                layoutOptions={{
+                    margin: 10,
+                    align: "justify",
+                }}
+                onAppend={e => {
+                    const nextGroupKey = (+e.groupKey! || 0) + 1;
+                    const nextKey = items.length;
+                    
+                    setItems([
+                        ...items,
+                        ...getItems(nextGroupKey, nextKey, 10),
+                    ]);
+                }}>
+                {items.map((item, i) => {      
+                    return (<SheetFolded data-groupkey={item.groupKey} key={"sheet"+i} data={item.data} />) 
+                })}
+            </GridLayout>
+        </div>
     )
 }
