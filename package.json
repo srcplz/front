@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@egjs/react-infinitegrid": "^3.0.6",
+    "@iconify/icons-eva": "^1.1.0",
     "@iconify/icons-fe": "^1.1.0",
     "@iconify/icons-ic": "^1.1.2",
     "@iconify/icons-jam": "^1.1.0",

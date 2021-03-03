@@ -44,7 +44,6 @@
 
 .background{
     background-color: var(--light-background);
-    
 }
 
 .tab{
@@ -69,6 +68,7 @@
     background-color: var(--light-background);
     text-indent: 1rem;
     overflow-y: auto;
+    padding: 0.525rem;
 }
 
 .editorContainer {

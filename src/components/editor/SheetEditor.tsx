@@ -1,18 +1,23 @@
-import React, { ReactElement, useRef, useState } from 'react'
-import { Row, Col, Tab, Nav } from 'react-bootstrap'
-import Textfield from '../core/Textfield'
-import TagsField from './tags/TagsField'
-import classNames from 'classnames'
-import styles from '../../styles/editor.module.css'
-import './editor.css'
-import { DraftBlockType, DraftEditorCommand, DraftHandleValue, Editor, EditorState, RichUtils } from 'draft-js'
-import Icon from '@iconify/react'
+import boldIcon from '@iconify/icons-fe/bold'
+import listBullet from '@iconify/icons-fe/list-bullet';
+import listOrder from '@iconify/icons-fe/list-order';
+import roundFormatItalic from '@iconify/icons-ic/round-format-italic'
 import header1 from '@iconify/icons-jam/header-1'
 import header2 from '@iconify/icons-jam/header-2'
 import header3 from '@iconify/icons-jam/header-3'
-import underlineIcon from '@iconify/icons-uil/underline';
-import boldIcon from '@iconify/icons-fe/bold';
-import roundFormatItalic from '@iconify/icons-ic/round-format-italic';
+import underlineIcon from '@iconify/icons-uil/underline'
+import Icon from '@iconify/react'
+import imageIcon from '@iconify/icons-eva/image-2-fill';
+import classNames from 'classnames'
+import { DraftBlockType, DraftEditorCommand, DraftHandleValue, Editor, EditorState, RichUtils, ContentState, CompositeDecorator, ContentBlock, Entity, convertToRaw } from 'draft-js'
+import React, { ReactElement, useRef, useState } from 'react'
+import { Col, Nav, Row, Tab } from 'react-bootstrap'
+import styles from '../../styles/editor.module.css'
+import Textfield from '../core/Textfield'
+import './editor.css'
+import TagsField from './tags/TagsField'
+import { ReactComponent as LinkIcon } from '../../img/link.svg'
+import HyperlinkModal from './hyperlink/HyperlinkModal';
 
 
 interface Props {
@@ -35,14 +40,33 @@ interface BulletPoint {
 
 
 export default function SheetEditor(props: Props): ReactElement {
+    const decorator = new CompositeDecorator([{
+        strategy: linkStrategy,
+        component: Link
+    }])
     const [state, setState] = useState(props.sheet)
-    const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
+    const [editorState, setEditorState] = useState(() => EditorState.createEmpty(decorator))
+    const [linkModalOpened, setLinkModalOpened] = useState(false)
     const editorRef = useRef<Editor>(null)
 
-    function focusEditor() {
-        editorRef.current?.focus()
-
+    function linkStrategy(contentBlock: ContentBlock, callback: (start: number, end:number) => void, contentState: ContentState) {
+        contentBlock.findEntityRanges((char) => {
+            const entityKey = char.getEntity()
+            return (
+                entityKey !== null &&
+                contentState.getEntity(entityKey).getType() === 'LINK'
+            )
+        }, callback)
     }
+
+    function focusEditor() {
+        function logState(state: ContentState) {
+            console.log(convertToRaw(state))
+        }
+        editorRef.current?.focus()
+        logState(editorState.getCurrentContent())
+    }
+    
 
     function handleKeyCommand(command: DraftEditorCommand): DraftHandleValue {
         const newState = RichUtils.handleKeyCommand(editorState, command)
@@ -64,8 +88,28 @@ export default function SheetEditor(props: Props): ReactElement {
         }
         return 'not-handled'
     }
+
+    function insertLinkEntity(text: string, url: URL) {
+        let contentState = editorState.getCurrentContent()
+        let linkEntity = contentState.createEntity('LINK', 'MUTABLE', {url: url.href, })
+    }
+
+    function tests() {
+        let contentState = editorState.getCurrentContent()
+        let newContent = contentState.createEntity('LINK', 'IMMUTABLE', {url: 'wwww.example.com', })
+        let entityKey = newContent.getLastCreatedEntityKey()
+        let newState = EditorState.set(editorState, {currentContent: newContent})
+        setEditorState(RichUtils.toggleLink(newState, newState.getSelection(), entityKey))
+    
+        console.log('done')
+    }
+
     return (
         <div className={styles.container}>
+            {linkModalOpened ? <HyperlinkModal 
+            insertLink={insertLinkEntity}
+            closeModal={() => setLinkModalOpened(false)}/> 
+            : null}
             <div className={styles.contentContainer}>
             <Textfield title="Title" value={state.title} onChange={v => setState({...state, title: v})}/>
                     <TagsField title="Tags" value={state.tags} onChange={tags => setState({...state, tags: tags})}/>
@@ -126,8 +170,7 @@ export default function SheetEditor(props: Props): ReactElement {
                             overflow:'hidden',
                             border: "0.125rem solid var(--relief)",
                             backgroundColor:"var(--relief)",
-                            borderRadius:"0.5rem", 
-                            minHeight:"10rem"}}>
+                            borderRadius:"0.5rem",}}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="text" title="Text">
                                     {/* <Col */}
@@ -137,22 +180,34 @@ export default function SheetEditor(props: Props): ReactElement {
                                                 marginLeft:"0.5rem",
                                                 marginRight:"0.5rem",}}>
                                                     <button onClick={e => setBlockType('header-one')}>
-                                                        <Icon icon={header1} style={{color: '#fff6fb', fontSize: '36px'}} />
+                                                        <Icon icon={header1} style={{color: '#fff6fb', fontSize: '36px', margin:"0.5rem"}} />
                                                     </button>
                                                     <button onClick={e => setBlockType('header-two')}>
-                                                        <Icon icon={header2} style={{color: '#fff6fb', fontSize: '30px'}} />
+                                                        <Icon icon={header2} style={{color: '#fff6fb', fontSize: '30px', margin:"0.5rem"}} />
                                                     </button>
                                                     <button onClick={e => setBlockType('header-three')}>
-                                                        <Icon icon={header3} style={{color: '#fff6fb', fontSize: '24px'}} />
+                                                        <Icon icon={header3} style={{color: '#fff6fb', fontSize: '24px', margin:"0.5rem"}} />
                                                     </button>
                                                     <button onClick={e => handleKeyCommand('underline')}>
-                                                        <Icon icon={underlineIcon} style={{color: '#fff6fb', fontSize: '28px'}} />
+                                                        <Icon icon={underlineIcon} style={{color: '#fff6fb', fontSize: '28px', margin:"0.5rem"}} />
                                                     </button>
                                                     <button onClick={e => handleKeyCommand('italic')}>
-                                                        <Icon icon={roundFormatItalic} style={{color: '#fff6fb', fontSize: '24px'}} />
+                                                        <Icon icon={roundFormatItalic} style={{color: '#fff6fb', fontSize: '24px', margin:"0.5rem"}} />
                                                     </button>
                                                     <button onClick={e => handleKeyCommand('bold')}>
-                                                        <Icon icon={boldIcon} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px"}} />
+                                                        <Icon icon={boldIcon} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
+                                                    </button>
+                                                    <button onClick={e => setBlockType('unordered-list-item')}>
+                                                        <Icon icon={listBullet} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
+                                                    </button>
+                                                    <button onClick={e => setBlockType('ordered-list-item')}>
+                                                        <Icon icon={listOrder} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
+                                                    </button>
+                                                    <button onClick={e => tests()}>
+                                                        <LinkIcon style={{margin:"0.5rem"}}/>
+                                                    </button>
+                                                    <button onClick={e => setBlockType('ordered-list-item')}>
+                                                        <Icon icon={imageIcon} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                                                     </button>
                                             </Row>
                                             <div className={styles.editorContainer} onClick={(e) => focusEditor()}>
@@ -162,6 +217,7 @@ export default function SheetEditor(props: Props): ReactElement {
                                                     onChange={setEditorState}
                                                     placeholder={"How to be right"}
                                                     handleKeyCommand={handleKeyCommand}
+            
                                                 />
                                             </div>
                                         </div>
@@ -178,3 +234,17 @@ export default function SheetEditor(props: Props): ReactElement {
     )
 }
 
+interface LinkProps {
+    contentState: ContentState,
+    entityKey: string,
+    decoratedText: string,
+}
+let Link: React.FC<LinkProps> = (props) => {
+    const entity = props.contentState.getEntity(props.entityKey)
+    const { url } = entity.getData()
+    return (
+        <a href={url}>
+            {props.decoratedText}
+        </a>
+    )
+}
