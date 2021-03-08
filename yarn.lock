@@ -1030,20 +1030,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@convertkit/slate-keymap@^0.1.10":
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/@convertkit/slate-keymap/-/slate-keymap-0.1.10.tgz#8a6ccb6d57649c155446120d8fec6668f46591a1"
-  integrity sha512-wkSRk2io5u1Jb033jrT5XhIX+TigN1v6xyxUoSoJglcxVkktO+WVqOwNqX2THKLyDwc3l6dLLmT7WXYiwvYqMQ==
-  dependencies:
-    is-hotkey "^0.1.4"
-
-"@convertkit/slate-lists@^0.2.11":
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/@convertkit/slate-lists/-/slate-lists-0.2.11.tgz#69ce84aa06b2d40effbbf1a35217657c5a31ca79"
-  integrity sha512-OX5mTK089VqxSu8IUPQDGoCXxMOAQxz4pNnT/aFErGZnnHc9Ym3QK4XT32OWidhqOBjxA7IYE31srz/+eyXETg==
-  dependencies:
-    "@convertkit/slate-keymap" "^0.1.10"
-
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
@@ -6241,7 +6227,7 @@ is-glob@^4.0.0, is-glob@^4.0.1, is-glob@~4.0.1:
   dependencies:
     is-extglob "^2.1.1"
 
-is-hotkey@^0.1.4, is-hotkey@^0.1.6:
+is-hotkey@^0.1.6:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/is-hotkey/-/is-hotkey-0.1.8.tgz#6b1f4b2d0e5639934e20c05ed24d623a21d36d25"
   integrity sha512-qs3NZ1INIS+H+yeo7cD9pDfwYV/jqRh1JG9S9zYrNudkoUQg7OL7ziXqRKu+InFjUIDoP2o6HIkLYMh1pcWgyQ==
@@ -10329,6 +10315,14 @@ slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
+
+slate-history@^0.59.0:
+  version "0.59.0"
+  resolved "https://registry.yarnpkg.com/slate-history/-/slate-history-0.59.0.tgz#3c5ecbe8893ce2ae9523068ccc17c62d52b24a1a"
+  integrity sha512-LBaVmxA7QKr5faDUt0rjgFH4TwAslyl4rrltpM6PVZYeJ301KkpUTqZf83asDjwgt5pl9nEx4huKL7IlX+rZfA==
+  dependencies:
+    immer "^5.0.0"
+    is-plain-object "^3.0.0"
 
 slate-react@^0.59.0:
   version "0.59.0"

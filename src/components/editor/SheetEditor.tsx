@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import React, { ReactElement, useMemo, useState } from 'react'
 import { Col, Nav, Row, Tab } from 'react-bootstrap'
 import { createEditor, Node } from 'slate'
+import { withHistory } from 'slate-history'
 import { withReact } from 'slate-react'
 import styles from '../../styles/editor.module.css'
 import Textfield from '../core/Textfield'
@@ -30,7 +31,7 @@ interface BulletPoint {
 
 export default function SheetEditor(props: Props): ReactElement {
     const [state, setState] = useState(props.sheet)
-    const editor = useMemo(() => withReact(createEditor()), props.sheet.content)
+    const editor = useMemo(() => withHistory(withReact(createEditor())), props.sheet.content)
     
     function updateContent(content: Node[]) {
         setState({...state, content: content})

@@ -9,11 +9,12 @@ import underlineIcon from '@iconify/icons-uil/underline'
 import Icon from '@iconify/react'
 import imageIcon from '@iconify/icons-eva/image-2-fill';
 import { ReactComponent as LinkIcon } from '../../img/link.svg'
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { Editable, ReactEditor, RenderElementProps, RenderLeafProps, Slate, withReact } from 'slate-react';
 import { createEditor, Editor, Transforms, Text, Node, Element } from 'slate';
 import { Row } from 'react-bootstrap';
 import styles from '../../styles/editor.module.css'
+import HyperlinkModal from './hyperlink/HyperlinkModal';
 
 
 interface Props {
@@ -180,10 +181,14 @@ const TextEditor = {
     }
     return false
   },
+
+  insertLink(editor: Editor & ReactEditor, url: string) {
+    
+  }
 }
 
 const SlateEditor = (props: Props) => {
-
+  const [modalState, setModalState] = useState(false)
   function keyDownHandler(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.shiftKey && event.key === 'Tab' && TextEditor.isList(props.editor)) {
         // Transforms.wrapNodes(editor)
@@ -257,10 +262,16 @@ const SlateEditor = (props: Props) => {
           return (<li {...props.attributes}>{props.children}</li>)
       
         default:
-          return (<p {...props.attributes}>{props.children}</p>)
+          return (<p {...props.attributes} style={{marginBottom:"4px"}}>{props.children}</p>)
       }
     }, []
   )
+
+  const focusEditor = (editor: Editor & ReactEditor) => {
+    let edges = Editor.edges(editor, [])
+    ReactEditor.focus(editor)
+    Transforms.select(editor, edges[1])
+  }
 
   return (
     <Slate
@@ -295,14 +306,17 @@ const SlateEditor = (props: Props) => {
                       <button onClick={e => {TextEditor.toggleBlock(props.editor, 'ordered-list')}}>
                           <Icon icon={listOrder} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {}}>
+                      <button onClick={e => {setModalState(true)}}>
                           <LinkIcon style={{margin:"0.5rem"}}/>
+                          {modalState ?
+                           <HyperlinkModal closeModal={() => setModalState(false)} editor={props.editor}/>
+                          : null}
                       </button>
                       <button onClick={e => {}}>
                           <Icon icon={imageIcon} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                       </button>
               </Row>
-              <div className={styles.editorContainer}> 
+              <div className={styles.editorContainer} onClick={() => {focusEditor(props.editor)}}> 
                   <Editable 
                   placeholder="Debunk the world"
                   renderLeaf={renderLeaf}
