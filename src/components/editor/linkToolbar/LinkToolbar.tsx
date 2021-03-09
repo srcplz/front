@@ -3,7 +3,7 @@ import { Editor, Range } from 'slate'
 import { ReactEditor, useSlate } from 'slate-react'
 import * as URI from 'uri-js'
 import { TextEditor } from '../../../utils/editor'
-import {ReactComponent as EditIcon} from '../../../img/edit.svg'
+import {ReactComponent as CrossIcon} from '../../../img/x.svg'
 import ToolbarPortal from './ToolbarPortal'
 import styles from '../../../styles/editor.module.css'
 
@@ -62,8 +62,8 @@ function LinkToolbar(props: Props): ReactElement {
             <a href={url} style={{color:"var(--font-light)"}}>
               {rawUrl}
             </a>
-            <button>
-              <EditIcon stroke="var(--font-light)" style={{marginLeft:"4px", paddingBottom:"4px", height:"24px"}}/>
+            <button onClick={() => {TextEditor.removeLink(editor)}}>
+              <CrossIcon stroke="var(--font-light)" style={{marginLeft:"4px", paddingBottom:"4px", height:"24px"}}/>
             </button>
           </div>
           : null}
