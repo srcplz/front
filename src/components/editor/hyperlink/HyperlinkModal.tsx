@@ -1,5 +1,5 @@
-import React, { ReactElement, useEffect, useState } from 'react'
-import { Editor } from 'slate'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import { Editor, Transforms } from 'slate'
 import { ReactEditor } from 'slate-react'
 import Modal from '../../core/Modal'
 import Textfield from '../../core/Textfield'
@@ -13,6 +13,14 @@ interface Props {
 
 export default function HyperlinkModal(props: Props): ReactElement {
   let [urlState, setUrlState] = useState("www.yourlink.com")
+  let selectionRef = useRef(props.editor.selection)
+  const onClick = () => {
+    if (selectionRef.current) {
+      Transforms.select(props.editor, selectionRef.current)
+    }
+    props.insertLink(urlState)
+    props.closeModal()
+  }
   return (
     <Modal closingFunction={props.closeModal}>
       <div style={{
@@ -28,10 +36,7 @@ export default function HyperlinkModal(props: Props): ReactElement {
         {//TODO: Replace with simple check button
         }
         <button className={styles.button} 
-        onClick={() => {
-          props.insertLink(urlState)
-          props.closeModal()
-        }}
+        onClick={onClick}
         style={{
           marginTop:0, 
           marginRight:16, 
