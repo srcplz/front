@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import styles from '../../styles/core.module.css'
 
 interface Props {
@@ -12,23 +12,31 @@ interface Props {
 }
 
 interface TextfieldStyles {
-    container?: string,
-    input?: string,
-    label?: string,
-    error?: string
+    container?: CSSProperties | undefined,
+    input?: CSSProperties | undefined,
+    label?: CSSProperties | undefined,
+    error?: CSSProperties | undefined
 }
 
 const Textfield: React.FC<Props> = (props) => {
     return (
-        <div className={props.styles?.container ?? styles.textInputContainer}>
-            <div className={props.styles?.label ?? styles.label}>{props.title}</div>
+        <div className={styles.textInputContainer}
+        style={props.styles?.container}>
+            <div className={styles.label}
+            style={props.styles?.label}>
+                {props.title}
+            </div>
             <input 
                 type={props.type} 
                 value={props.value} 
                 onChange={e => props.onChange(e.target.value)} 
-                className={props.fieldValid ? styles.textInput : styles.textInputInvalid}/>
+                className={props.fieldValid ? styles.textInput : styles.textInputInvalid}
+                style={props.styles?.input}/>
             
-                <div className={styles.errorLabel}>{props.fieldValid ? null: props.errorMessage}</div>
+                <div className={styles.errorLabel}
+                    style={props.styles?.error}>
+                    {props.fieldValid ? null: props.errorMessage}
+                </div>
         </div>
     )
 }

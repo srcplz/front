@@ -73,3 +73,17 @@
 .editorContainer {
     flex-grow: 1;
 }
+
+.toolbarContainer {
+    padding: 8px 7px 6px;
+    position: absolute;
+    z-index: 1;
+    top: -10000px;
+    left: -10000px;
+    margin-top: -6px;
+    opacity: 0;
+    background-color: var(--accent);
+    border-radius: 4px;
+    transition: opacity 0.75s;
+    color: var(--light-background);
+}

@@ -10,201 +10,98 @@ import Icon from '@iconify/react'
 import imageIcon from '@iconify/icons-eva/image-2-fill';
 import { ReactComponent as LinkIcon } from '../../img/link.svg'
 import React, { useCallback, useMemo, useState } from "react"
-import { Editable, ReactEditor, RenderElementProps, RenderLeafProps, Slate, withReact } from 'slate-react';
-import { createEditor, Editor, Transforms, Text, Node, Element } from 'slate';
+import { Editable, ReactEditor, RenderElementProps, RenderLeafProps, Slate, withReact, } from 'slate-react';
+import { Editor, Transforms, Text, Node, Element, Range, createEditor } from 'slate';
 import { Row } from 'react-bootstrap';
 import styles from '../../styles/editor.module.css'
 import HyperlinkModal from './hyperlink/HyperlinkModal';
+import LinkToolbar from './linkToolbar/LinkToolbar';
+import { withHistory } from 'slate-history';
+import { TextEditor } from '../../utils/editor';
 
 
 interface Props {
-  onChange: (content: Node[]) => void,
+  onSave: (content: Node[]) => void,
   content: Node[],
-  editor: Editor & ReactEditor
 }
 
-const TextEditor = {
-  LIST_TYPES: ['ordered-list', 'unordered-list'],
-
-  isBoldMarkActive(editor: Editor & ReactEditor) {
-      const [match] = Editor.nodes(editor, {
-        match: n => n.bold === true,
-        universal: true,
-      })
-      
-      return !!match
-    },
-
-  isItalicMarkActive(editor: Editor & ReactEditor) {
-      const [match] = Editor.nodes(editor, {
-        match: n => n.italic === true,
-        universal: true,
-      })
-      
-      return !!match
-    },
-
-  isUnderlineMarkActive(editor: Editor & ReactEditor) {
-      const [match] = Editor.nodes(editor, {
-        match: n => n.underline === true,
-        universal: true,
-      })
-      
-      return !!match
-    },
-
-  isBlockActive(editor: Editor & ReactEditor, format: string) {
-      const [match] = Editor.nodes(editor, {
-          match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === format,
-      })
-
-      return !!match
-  },
-
-  isList(editor: Editor & ReactEditor) {
-    const [match] = Editor.nodes(editor, {
-      match: n => TextEditor.LIST_TYPES.includes(n.type as string)
-    })
-    return !!match
-  },
-  
-  toggleBoldMark(editor: Editor & ReactEditor) {
-    const isActive = TextEditor.isBoldMarkActive(editor)
-    Transforms.setNodes(
-      editor,
-      { bold: isActive ? null : true },
-      { match: n => Text.isText(n), split: true }
-    )
-    ReactEditor.focus(editor)
-  },
-    
-  toggleItalicMark(editor: Editor & ReactEditor) {
-    const isActive = TextEditor.isItalicMarkActive(editor)
-    Transforms.setNodes(
-      editor,
-      { italic: isActive ? null : true},
-      { match: n => Text.isText(n), split: true}
-    )
-    ReactEditor.focus(editor)
-  },
-    
-    toggleUnderlineMark(editor: Editor & ReactEditor) {
-      const isActive = TextEditor.isUnderlineMarkActive(editor)
-      Transforms.setNodes(
-        editor,
-        { underline: isActive ? null : true},
-        { match: n => Text.isText(n), split: true}
-      )
-      ReactEditor.focus(editor)
-    },
-
-  toggleBlock(editor: Editor & ReactEditor, format: string) {
-    const isActive = TextEditor.isBlockActive(editor, format)
-    const isList = TextEditor.LIST_TYPES.includes(format)
-
-    Transforms.unwrapNodes(editor, {
-      match: n => !Editor.isEditor(n) && Element.isElement(n) && TextEditor.LIST_TYPES.includes(n.type as string),
-      split: true,
-    })
-
-    Transforms.setNodes(
-        editor,
-        {
-            type: isActive? null : isList? 'list-item' : format,
-        }
-    )
-
-    if (!isActive && isList) {
-      Transforms.wrapNodes(editor,
-        {
-          type: format,
-          children: []
-        })
-    }
-    ReactEditor.focus(editor)
-  },
-
-  indentList(editor: Editor & ReactEditor) {
-    if (!TextEditor.isList(editor)) {
-      return
-    }
-    let [match] = Editor.nodes(
-      editor, {
-        match: n => TextEditor.LIST_TYPES.includes(n.type as string)
-      }
-    )
-    
-    Transforms.wrapNodes(editor, {
-      type: match[0].type,
-      children: []
-    })
-  },
-  
-  unindentList(editor: Editor & ReactEditor) {
-    if (!TextEditor.isList(editor)) {
-      return
-    }
-    let [match] = Editor.nodes(
-      editor, {
-        match: n => TextEditor.LIST_TYPES.includes(n.type as string)
-      }
-    )
-    if (!!!editor.selection) {
-      return
-    }
-    let selectionPath = editor.selection.anchor.path
-    let parentPath = selectionPath.slice(0, selectionPath.length - 2)
-    if (parentPath.length === 0) {
-      return
-    }
-    let grandParent = Node.parent(editor, parentPath)
-    if (TextEditor.LIST_TYPES.includes(grandParent.type as string)) {
-      Transforms.unwrapNodes(editor, {
-        match: n => n.type === match[0].type,
-      })
-    }
-    
-  },
-
-  shouldExitList(editor: Editor & ReactEditor) {
-    if (!TextEditor.isList(editor)) {
-      return
-    }
-    let [match] = Editor.nodes(
-      editor, {
-        match: n => TextEditor.LIST_TYPES.includes(n.type as string)
-      }
-    )
-    if (Node.string(editor).length === 0) {
-      TextEditor.toggleBlock(editor, match[0].type as string)
-      return true
-    }
-    return false
-  },
-
-  insertLink(editor: Editor & ReactEditor, url: string) {
-    
-  }
-}
 
 const SlateEditor = (props: Props) => {
+  let [contentState, setContentState] = useState(props.content)
+  const withInlineLinks = (editor: Editor & ReactEditor) => {
+    const {isInline} = editor
+    editor.isInline = element => element.type === 'link' ? true : isInline(element)
+    return editor
+  }
+  const editor = useMemo(() => withHistory(withInlineLinks(withReact(createEditor()))), props.content)
   const [modalState, setModalState] = useState(false)
+  const closeModal = () => {
+    // hacky solution because the setModalState function somehow doesn't work
+    // when called from HyperlinkModal
+    setTimeout(() => {
+      setModalState(false)
+    }, 0)
+  }
+  
+  const renderLeaf = useCallback(
+    props => {
+        return <Leaf {...props}/>
+    },
+    [],
+  )
+  
+  const renderElement = useCallback(
+  (props: RenderElementProps) => {
+    switch (props.element.type) {
+      case 'header1':
+        return (<h1 {...props.attributes}>{props.children}</h1>)
+        
+      case 'header2':
+        return (<h2 {...props.attributes}>{props.children}</h2>)
+  
+      case 'header3':
+        return (<h3 {...props.attributes}>{props.children}</h3>)
+  
+      case 'ordered-list':
+        return (<ol {...props.attributes}>{props.children}</ol>)
+  
+      case 'unordered-list':
+        return (<ul {...props.attributes}>{props.children}</ul>)
+  
+      case 'list-item':
+      return (<li {...props.attributes} 
+          style={{listStyleType:props.element.listType === 'ordered-list'?'decimal':'disc'}}>
+            {props.children}
+          </li>)
+  
+      case 'link':
+        return (<a {...props.attributes} href={props.element.url as string}>
+          {props.children}
+        </a>)
+    
+      default:
+        return (<p {...props.attributes} style={{marginBottom:"4px"}}>{props.children}</p>)
+    }
+  }, []
+  )
+  
+
   function keyDownHandler(event: React.KeyboardEvent<HTMLDivElement>) {
-    if (event.shiftKey && event.key === 'Tab' && TextEditor.isList(props.editor)) {
+    if (event.shiftKey && event.key === 'Tab' && TextEditor.isList(editor)) {
         // Transforms.wrapNodes(editor)
         event.preventDefault()
-        TextEditor.unindentList(props.editor)
+        TextEditor.unindentList(editor)
         return
     }
-    if (event.key === 'Tab' && TextEditor.isList(props.editor)) {
+    if (event.key === 'Tab' && TextEditor.isList(editor)) {
       // Transforms.wrapNodes(editor)
       event.preventDefault()
-      TextEditor.indentList(props.editor)
+      TextEditor.indentList(editor)
       return
     }
 
-    if (event.key === 'Backspace' && TextEditor.isList(props.editor)) {
-      if (TextEditor.shouldExitList(props.editor)) {
+    if (event.key === 'Backspace' && TextEditor.isList(editor)) {
+      if (TextEditor.shouldExitList(editor)) {
         event.preventDefault()
       }
     }
@@ -217,57 +114,27 @@ const SlateEditor = (props: Props) => {
 
         case 'b': {
           event.preventDefault()
-          TextEditor.toggleBoldMark(props.editor)
+          TextEditor.toggleBoldMark(editor)
           break
         }
         case 'i': {
           event.preventDefault()
-          TextEditor.toggleItalicMark(props.editor)
+        TextEditor.toggleItalicMark(editor)
           break
         }
         case 'u': {
           event.preventDefault()
-          TextEditor.toggleUnderlineMark(props.editor)
+          TextEditor.toggleUnderlineMark(editor)
           break
         }
       }
   }
 
-  const renderLeaf = useCallback(
-      props => {
-          return <Leaf {...props}/>
-      },
-      [],
-  )
-
-  const renderElement = useCallback(
-    (props: RenderElementProps) => {
-      switch (props.element.type) {
-        case 'header1':
-          return (<h1 {...props.attributes}>{props.children}</h1>)
-          
-        case 'header2':
-          return (<h2 {...props.attributes}>{props.children}</h2>)
-
-        case 'header3':
-          return (<h3 {...props.attributes}>{props.children}</h3>)
-
-        case 'ordered-list':
-          return (<ol {...props.attributes}>{props.children}</ol>)
-
-        case 'unordered-list':
-          return (<ul {...props.attributes}>{props.children}</ul>)
-
-        case 'list-item':
-          return (<li {...props.attributes}>{props.children}</li>)
-      
-        default:
-          return (<p {...props.attributes} style={{marginBottom:"4px"}}>{props.children}</p>)
-      }
-    }, []
-  )
-
+  
   const focusEditor = (editor: Editor & ReactEditor) => {
+    if (ReactEditor.isFocused(editor)) {
+      return
+    }
     let edges = Editor.edges(editor, [])
     ReactEditor.focus(editor)
     Transforms.select(editor, edges[1])
@@ -275,48 +142,59 @@ const SlateEditor = (props: Props) => {
 
   return (
     <Slate
-      editor={props.editor}
-      value={props.content}
-      onChange={newValue => props.onChange(newValue)}>
+      editor={editor}
+      value={contentState}
+      onChange={newValue => {
+        setContentState(newValue)}}>
           <div style={{display:"flex", flexDirection:"column", height:"100%"}}>
               <Row style={{
                   marginLeft:"0.5rem",
                   marginRight:"0.5rem",}}>
-                      <button onClick={e => {TextEditor.toggleBlock(props.editor, 'header1')}}>
+                      <button onClick={e => {TextEditor.toggleBlock(editor, 'header1')}}>
                           <Icon icon={header1} style={{color: '#fff6fb', fontSize: '36px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBlock(props.editor, 'header2')}}>
+                      <button onClick={e => {TextEditor.toggleBlock(editor, 'header2')}}>
                           <Icon icon={header2} style={{color: '#fff6fb', fontSize: '30px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBlock(props.editor, 'header3')}}>
+                      <button onClick={e => {TextEditor.toggleBlock(editor, 'header3')}}>
                           <Icon icon={header3} style={{color: '#fff6fb', fontSize: '24px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleUnderlineMark(props.editor)}}>
+                      <button onClick={e => {TextEditor.toggleUnderlineMark(editor)}}>
                           <Icon icon={underlineIcon} style={{color: '#fff6fb', fontSize: '28px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleItalicMark(props.editor)}}>
+                      <button onClick={e => {TextEditor.toggleItalicMark(editor)}}>
                           <Icon icon={roundFormatItalic} style={{color: '#fff6fb', fontSize: '24px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBoldMark(props.editor)}}>
+                      <button onClick={e => {TextEditor.toggleBoldMark(editor)}}>
                           <Icon icon={boldIcon} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBlock(props.editor, 'unordered-list')}}>
+                      <button onClick={e => {TextEditor.toggleBlock(editor, 'unordered-list')}}>
                           <Icon icon={listBullet} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBlock(props.editor, 'ordered-list')}}>
+                      <button onClick={e => {TextEditor.toggleBlock(editor, 'ordered-list')}}>
                           <Icon icon={listOrder} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                       </button>
                       <button onClick={e => {setModalState(true)}}>
                           <LinkIcon style={{margin:"0.5rem"}}/>
                           {modalState ?
-                           <HyperlinkModal closeModal={() => setModalState(false)} editor={props.editor}/>
+                           <HyperlinkModal 
+                           insertLink={(url) => {
+                             TextEditor.insertLink(editor, url)
+                           }}
+                           closeModal={() => closeModal()} 
+                           editor={editor}/>
                           : null}
                       </button>
                       <button onClick={e => {}}>
-                          <Icon icon={imageIcon} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
+                          <Icon icon={imageIcon} style={{
+                            color: "#fff6fb", 
+                            fontSize: "20px", 
+                            marginTop:"-4px", 
+                            margin:"0.5rem"}} />
                       </button>
               </Row>
-              <div className={styles.editorContainer} onClick={() => {focusEditor(props.editor)}}> 
+              <div className={styles.editorContainer} onClick={() => {focusEditor(editor)}}> 
+                  <LinkToolbar/>
                   <Editable 
                   placeholder="Debunk the world"
                   renderLeaf={renderLeaf}

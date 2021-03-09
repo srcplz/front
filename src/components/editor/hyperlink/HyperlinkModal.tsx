@@ -1,18 +1,45 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { Editor } from 'slate'
 import { ReactEditor } from 'slate-react'
 import Modal from '../../core/Modal'
+import Textfield from '../../core/Textfield'
+import styles from '../../../styles/core.module.css'
 
 interface Props {
   closeModal: () => void,
-  // insertLink: (text: string, url: URL) => void,
+  insertLink: (url: string) => void,
   editor: Editor & ReactEditor,
 }
 
 export default function HyperlinkModal(props: Props): ReactElement {
+  let [urlState, setUrlState] = useState("www.yourlink.com")
   return (
     <Modal closingFunction={props.closeModal}>
-      
+      <div style={{
+        display:"flex",
+        flexDirection:"row"
+      }}>
+        <Textfield
+        title="Link URL"
+        value={urlState}
+        onChange={setUrlState}
+        styles={{container:{flexGrow:1}}}
+        />
+        {//TODO: Replace with simple check button
+        }
+        <button className={styles.button} 
+        onClick={() => {
+          props.insertLink(urlState)
+          props.closeModal()
+        }}
+        style={{
+          marginTop:0, 
+          marginRight:16, 
+          width:"auto", 
+          paddingLeft:8, 
+          paddingRight:8, 
+          boxShadow:"none"}}>Insert Link</button>
+      </div>
     </Modal>
   )
 }
