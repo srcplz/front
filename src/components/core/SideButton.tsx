@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import styles from '../styles/sidebar.module.css'
-import {ReactComponent as SocialIcon} from '../img/sourcerers.svg'
-import {ReactComponent as EditIcon} from '../img/edit.svg'
-import {ReactComponent as FavoritesIcon} from '../img/favorites.svg'
-import {ReactComponent as FolderIcon} from '../img/folder.svg'
-import {ReactComponent as SearchIcon} from '../img/search.svg'
+import styles from '../../styles/sidebar.module.css'
+import {ReactComponent as SocialIcon} from '../../img/sourcerers.svg'
+import {ReactComponent as EditIcon} from '../../img/edit.svg'
+import {ReactComponent as FavoritesIcon} from '../../img/favorites.svg'
+import {ReactComponent as FolderIcon} from '../../img/folder.svg'
+import {ReactComponent as SearchIcon} from '../../img/search.svg'
 import { Link, Route, match } from 'react-router-dom'
-import { colors } from '../utils/colors'
+import { colors } from '../../utils/colors'
 
 export enum ButtonTypes {
     Search,

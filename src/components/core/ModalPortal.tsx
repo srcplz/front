@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { createPortal } from 'react-dom'
-import styles from '../styles/core.module.css'
+import styles from '../../styles/core.module.css'
 
 
 class ModalPortal extends Component {

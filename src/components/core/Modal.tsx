@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
-import styles from '../styles/modal.module.css'
-import { useOnClickOutside } from '../utils/hooks'
+import styles from '../../styles/modal.module.css'
+import { useOnClickOutside } from '../../utils/hooks'
 import ModalPortal from './ModalPortal'
 
 interface ModalProps {

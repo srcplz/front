@@ -1,0 +1,35 @@
+.nav-link.active {
+  border-radius: 1rem 1rem 0 0 !important;
+  background-color: var(--relief) !important;
+  border: none !important;
+  color: var(--light-background) !important;
+}
+
+.nav-link.active:hover {
+  text-decoration: none !important;
+}
+
+.nav-link{
+  background-color: var(--light-background) !important;
+  height: 100% !important;
+  color: var(--font-light);
+  margin-bottom: 0 !important;
+  padding-top: 0.75rem !important;
+}
+
+.nav-tabs .nav-link:hover{
+  border-color: transparent !important;
+  text-decoration: underline;
+  color: var(--font-medium);
+}
+
+.tab-content{
+  height: 100%;
+  width: 100%;
+}
+
+.tab-pane.active.show {
+  height: 100%;
+  width: 100%;
+
+}
