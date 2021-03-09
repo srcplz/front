@@ -88,13 +88,11 @@ const SlateEditor = (props: Props) => {
 
   function keyDownHandler(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.shiftKey && event.key === 'Tab' && TextEditor.isList(editor)) {
-        // Transforms.wrapNodes(editor)
         event.preventDefault()
         TextEditor.unindentList(editor)
         return
     }
     if (event.key === 'Tab' && TextEditor.isList(editor)) {
-      // Transforms.wrapNodes(editor)
       event.preventDefault()
       TextEditor.indentList(editor)
       return
@@ -185,13 +183,7 @@ const SlateEditor = (props: Props) => {
                            editor={editor}/>
                           : null}
                       </button>
-                      <button onClick={e => {}}>
-                          <Icon icon={imageIcon} style={{
-                            color: "#fff6fb", 
-                            fontSize: "20px", 
-                            marginTop:"-4px", 
-                            margin:"0.5rem"}} />
-                      </button>
+                      {/* TODO: Handle embeds of videos and images */}
               </Row>
               <div className={styles.editorContainer} onClick={() => {focusEditor(editor)}}> 
                   <LinkToolbar/>

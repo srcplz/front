@@ -149,8 +149,6 @@ class LoginModal extends Component<Props, LoginModalState> {
                 let { accessToken, refreshToken } = res.data
                 this.props.cookies?.set('refresh', refreshToken)
                 this.props.cookies?.set('access', accessToken)
-                // let { token } = res.data
-                // this.props.cookies?.set('token', token)
                 context.setLoggedIn(true)
                 closeModal()
             } else {
