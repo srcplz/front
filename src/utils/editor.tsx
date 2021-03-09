@@ -1,6 +1,5 @@
-import React, { useCallback } from "react"
 import { Editor, Transforms, Element, Text, Range, Node } from "slate"
-import { ReactEditor, RenderElementProps } from "slate-react"
+import { ReactEditor } from "slate-react"
 
 export const TextEditor = {
   LIST_TYPES: ['ordered-list', 'unordered-list'],

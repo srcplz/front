@@ -7,11 +7,10 @@ import header2 from '@iconify/icons-jam/header-2'
 import header3 from '@iconify/icons-jam/header-3'
 import underlineIcon from '@iconify/icons-uil/underline'
 import Icon from '@iconify/react'
-import imageIcon from '@iconify/icons-eva/image-2-fill';
 import { ReactComponent as LinkIcon } from '../../img/link.svg'
 import React, { useCallback, useMemo, useState } from "react"
 import { Editable, ReactEditor, RenderElementProps, RenderLeafProps, Slate, withReact, } from 'slate-react';
-import { Editor, Transforms, Text, Node, Element, Range, createEditor } from 'slate';
+import { Editor, Transforms, Node, createEditor } from 'slate';
 import { Row } from 'react-bootstrap';
 import styles from '../../styles/editor.module.css'
 import HyperlinkModal from './hyperlink/HyperlinkModal';
@@ -148,31 +147,31 @@ const SlateEditor = (props: Props) => {
               <Row style={{
                   marginLeft:"0.5rem",
                   marginRight:"0.5rem",}}>
-                      <button onClick={e => {TextEditor.toggleBlock(editor, 'header1')}}>
+                      <button onClick={() => {TextEditor.toggleBlock(editor, 'header1')}}>
                           <Icon icon={header1} style={{color: '#fff6fb', fontSize: '36px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBlock(editor, 'header2')}}>
+                      <button onClick={() => {TextEditor.toggleBlock(editor, 'header2')}}>
                           <Icon icon={header2} style={{color: '#fff6fb', fontSize: '30px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBlock(editor, 'header3')}}>
+                      <button onClick={() => {TextEditor.toggleBlock(editor, 'header3')}}>
                           <Icon icon={header3} style={{color: '#fff6fb', fontSize: '24px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleUnderlineMark(editor)}}>
+                      <button onClick={() => {TextEditor.toggleUnderlineMark(editor)}}>
                           <Icon icon={underlineIcon} style={{color: '#fff6fb', fontSize: '28px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleItalicMark(editor)}}>
+                      <button onClick={() => {TextEditor.toggleItalicMark(editor)}}>
                           <Icon icon={roundFormatItalic} style={{color: '#fff6fb', fontSize: '24px', margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBoldMark(editor)}}>
+                      <button onClick={() => {TextEditor.toggleBoldMark(editor)}}>
                           <Icon icon={boldIcon} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBlock(editor, 'unordered-list')}}>
+                      <button onClick={() => {TextEditor.toggleBlock(editor, 'unordered-list')}}>
                           <Icon icon={listBullet} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {TextEditor.toggleBlock(editor, 'ordered-list')}}>
+                      <button onClick={() => {TextEditor.toggleBlock(editor, 'ordered-list')}}>
                           <Icon icon={listOrder} style={{color: "#fff6fb", fontSize: "20px", marginTop:"-4px", margin:"0.5rem"}} />
                       </button>
-                      <button onClick={e => {setModalState(true)}}>
+                      <button onClick={() => {setModalState(true)}}>
                           <LinkIcon style={{margin:"0.5rem"}}/>
                           {modalState ?
                            <HyperlinkModal 
